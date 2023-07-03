@@ -1,59 +1,47 @@
-import { useContext } from 'react'
-import logo from '../assets/react.svg'
-import useForm from '../hooks/useForm'
-import asyncHandler from 'express-async-handler'
-import { loginUser } from '@/services/userServices'
-import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '@/context/AuthContext'
+import { useState } from 'react'
+import axios from 'axios'
 
 const Login = () => {
-  const { login } = useContext(AuthContext)
-  const navigate = useNavigate()
-
-  // mandar los datos al backend
-  const sendData = asyncHandler(async (data) => {
-    const result = await loginUser(data)
-    console.log(result)
-    if (result.status === 200) {
-      const token = result.data.token
-      login(token)
-      navigate('/')
-    }
-  })
-
-  // usar custom hooks
-  const { input, handleInputChange, handleSubmit } = useForm(sendData, {
+  const [post, setPost] = useState({
     email: '',
     password: ''
   })
+  const handleInput = event => {
+    setPost({ ...post, [event.target.name]: event.target.value })
+  }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    console.log(`Frontend: ${post.email} ${post.password}`)
+    axios.post('http://localhost:5000/api/users/login', post)
+      .then(res => console.log(res))
+      .catch(error => {
+        console.log(error)
+      })
+  }
   return (
-    <div className='login'>
-      <div className='login-container'>
-        <img src={logo} alt='logo' className='logo' height='100px' />
+    <>
+      <div className='container mx-auto m-10 p-10 bg-gray-200'>
+        <h1 className='text-sz-xl'>Please enter your information to login</h1>
+        <form className='grid grid-cols-1 gap-2' onSubmit={handleSubmit} action=''>
+          <label className='' htmlFor=''>E-mail</label>
+          <input
+            type='email'
+            name='email'
+            placeholder='name@example.com'
+            onChange={handleInput}
+          />
+          <label className='' htmlFor=''>Password</label>
+          <input
+            type='password'
+            name='password'
+            placeholder='password'
+            onChange={handleInput}
+          />
+          <button className='bg-blue-500 text-white p-2 rounded-full'>Submit</button>
+        </form>
       </div>
-      <form action=''>
-        <label htmlFor='email'>Email</label>
-        <input
-          type='email'
-          name='email'
-          placeholder='email@email.com'
-          value={input.email}
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor='email'>Email</label>
-        <input
-          type='email'
-          name='email'
-          placeholder='email@email.com'
-          value={input.password}
-          onChange={handleInputChange}
-        />
-        <button onClick={handleSubmit}>Login</button>
-      </form>
-      Login
-    </div>
+    </>
   )
 }
 export default Login

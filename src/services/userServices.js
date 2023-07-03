@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:5000/api/users'
+const BASE_URL = 'http://localhost:5000/api'
+// Referencia: https://stackoverflow.com/questions/71989146/axios-instance-not-getting-the-token-from-local-storage-on-first-call-react-js
 
 axios.interceptors.request.use((config) => {
   const token = window.localStorage.getItem('token')
@@ -11,8 +12,7 @@ axios.interceptors.request.use((config) => {
 },
 (error) => {
   return Promise.reject(error)
-}
-)
+})
 
 const registerUser = (data) => axios.post(`${BASE_URL}/register`, data)
 
