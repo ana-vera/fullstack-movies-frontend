@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  const navigate = useNavigate()
+
   const [post, setPost] = useState({
     email: '',
     password: ''
@@ -14,7 +17,10 @@ const Login = () => {
     event.preventDefault()
     console.log(`Frontend: ${post.email} ${post.password}`)
     axios.post('http://localhost:5000/api/users/login', post)
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res)
+        navigate('/')
+      })
       .catch(error => {
         console.log(error)
       })

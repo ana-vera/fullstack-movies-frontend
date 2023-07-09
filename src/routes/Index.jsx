@@ -2,7 +2,8 @@ import {
   Home,
   Dashboard,
   Login,
-  Register
+  Register,
+  MovieDetails
 } from '@/pages'
 import { Routes, Route } from 'react-router-dom'
 
@@ -13,6 +14,7 @@ const RouterIndex = () => {
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
+      <Route path='/details' element={<MovieDetails />} />
     </Routes>
   )
 }
